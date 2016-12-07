@@ -10,6 +10,24 @@ namespace :spec do
       :name     =>  'localhost',
       :backend  =>  'exec',
       :anyenv_home  => '/Users/travis'
+    },
+    {
+      :name     =>  'localhost_linux',
+      :backend  =>  'exec',
+      :anyenv_owner => 'jenkins',
+      :anyenv_home  => '/home/travis'
+    },
+    {
+      :name     =>  'container',
+      :backend  =>  'docker',
+      :anyenv_owner => 'root',
+      :anyenv_home  => '/root'
+    },
+    {
+      :name     =>  'container_with_specified_user',
+      :backend  =>  'docker',
+      :anyenv_owner => 'jenkins',
+      :anyenv_home  => '/home/jenkins'
     }
   ]
   if ENV['SPEC_TARGET'] then

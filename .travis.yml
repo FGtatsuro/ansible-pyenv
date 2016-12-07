@@ -28,6 +28,23 @@ matrix:
       dist: trusty
       language: python
       python: 2.7
+      addons:
+        apt:
+          packages:
+          - python-pip
+      before_script:
+        - sudo groupadd jenkins
+        - sudo useradd -s /bin/bash -d /home/jenkins -m -g jenkins jenkins
+        - sudo pip install ansible
+        - ansible-galaxy install -r role_requirements.yml
+        - bundle install
+      env:
+        - TARGET=localhost_linux
+        - EXTRA_VARS="anyenv_home='/home/travis' anyenv_owner='travis' anyenv_group='travis' anyenv_profile='.bash_profile'"
+    - os: linux
+      dist: trusty
+      language: python
+      python: 2.7
       services:
         - docker
       addons:
@@ -58,6 +75,27 @@ matrix:
       env:
         - TARGET=container
         - IMAGE_NAME=fgtatsuro/infra-bridgehead:alpine-3.3
+        - EXTRA_VARS="anyenv_profile='.bash_profile'"
+    - os: linux
+      dist: trusty
+      language: python
+      python: 2.7
+      services:
+        - docker
+      addons:
+        apt:
+          packages:
+          - python-pip
+      before_script:
+        - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
+        - docker exec -it ${TARGET} groupadd jenkins
+        - docker exec -it ${TARGET} useradd -s /bin/bash -d /home/jenkins -m -g jenkins jenkins
+      after_script:
+        - docker rm -f ${TARGET}
+      env:
+        - TARGET=container_with_specified_user
+        - IMAGE_NAME=fgtatsuro/infra-bridgehead:debian-jessie
+        - EXTRA_VARS="anyenv_home='/home/jenkins' anyenv_owner='jenkins' anyenv_group='jenkins'"
 
 # This role needs sudo, thus we can't use the new container infrastructure
 # sudo: false

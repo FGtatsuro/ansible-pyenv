@@ -1,2 +1,44 @@
 ---
 # tasks file for pyenv(On Alpine Linux)
+- block:
+  - name: Check whether pyenv is installed
+    # Note: On Alpine Linux, shell is regarded as login shell without login option('-'). Why?
+    shell: "su -s {{ pyenv_login_shell }} -c 'pyenv versions' {{ anyenv_owner }}"
+    # To suppress following warnings:
+    #
+    # TASK [FGtatsuro.pyenv : Install pyenv] *****************************************
+    # [WARNING]: Consider using 'become', 'become_method', and 'become_user' rather than running su
+    #
+    # Reason:
+    #   become_method doesn't work well on container.
+    #     - When become_method=sudo(default), almost containers don't have sudo command.
+    #     - When become_method=su, docker connection plugin of Ansible doesn't allow 'su' as become_method.
+    args:
+      warn: no
+    register: result_pyenv_versions
+    ignore_errors: yes
+    changed_when: no
+  - name: Install pyenv
+    shell: "su -s {{ pyenv_login_shell }} -c 'anyenv install pyenv' {{ anyenv_owner }}"
+    args:
+      warn: no
+    when: "result_pyenv_versions.rc != 0"
+  - name: Install python
+    shell: "su -s {{ pyenv_login_shell }} -c 'pyenv install {{ item }}' {{ anyenv_owner }}"
+    args:
+      warn: no
+    when: "pyenv_python_versions is defined and item not in result_pyenv_versions.stdout"
+    with_items: "{{ pyenv_python_versions }}"
+  - name: Check default version
+    shell: "su -s {{ pyenv_login_shell }} -c 'pyenv global' {{ anyenv_owner }}"
+    args:
+      warn: no
+    register: result_pyenv_global
+    changed_when: no
+    when: "pyenv_global_version is defined"
+  - name: Set default version
+    shell: "su -s {{ pyenv_login_shell }} -c 'pyenv global {{ pyenv_global_version }}' {{ anyenv_owner }}"
+    args:
+      warn: no
+    when: "pyenv_global_version is defined and pyenv_global_version not in result_pyenv_global.stdout"
+  become: yes
