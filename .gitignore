@@ -1,0 +1,5 @@
+roles/*
+!roles/pyenv
+
+# Ansible
+tests/*.retry
