@@ -20,6 +20,12 @@ Role Variables
 
 The variables we can use in this role.
 
+|name|description|default|
+|---|---|---|
+|pyenv_python_versions|Installed python versions with pyenv.|It isn't defined in default. No python is installed.|
+|pyenv_global_version|This version is used as global in target host.|It isn't defined in default. Default version isn't set.|
+|pyenv_login_shell|Login shell used when this role installs pyenv and python.|/bin/bash|
+
 Role Dependencies
 -----------------
 
