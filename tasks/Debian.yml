@@ -2,6 +2,8 @@
 # tasks file for pyenv(On Debian family)
 - block:
   - name: Check whether pyenv is installed
+    # Alt.
+    # shell: "su -s {{ pyenv_login_shell }} -c 'source {{ anyenv_home }}/{{ anyenv_profile }} && pyenv versions' - {{ anyenv_owner }}"
     shell: "su -s {{ pyenv_login_shell }} -c 'pyenv versions' - {{ anyenv_owner }}"
     # To suppress following warnings:
     #

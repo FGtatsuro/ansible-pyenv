@@ -11,7 +11,6 @@ Requirements
 The dependencies on other softwares/libraries for this role.
 
 - Debian
-- Alpine Linux
 - OSX
   - Homebrew (>= 0.9.5)
 

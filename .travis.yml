@@ -70,24 +70,6 @@ matrix:
           - python-pip
       before_script:
         - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
-      after_script:
-        - docker rm -f ${TARGET}
-      env:
-        - TARGET=container
-        - IMAGE_NAME=fgtatsuro/infra-bridgehead:alpine-3.3
-        - EXTRA_VARS="anyenv_profile='.bash_profile'"
-    - os: linux
-      dist: trusty
-      language: python
-      python: 2.7
-      services:
-        - docker
-      addons:
-        apt:
-          packages:
-          - python-pip
-      before_script:
-        - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
         - docker exec -it ${TARGET} groupadd jenkins
         - docker exec -it ${TARGET} useradd -s /bin/bash -d /home/jenkins -m -g jenkins jenkins
       after_script:
