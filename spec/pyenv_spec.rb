@@ -13,13 +13,13 @@ describe command(command_base % 'pyenv versions') do
 end
 
 describe command(command_base % 'pyenv global') do
-  its(:stdout) { should contain('2.7.12') }
-  its(:stdout) { should_not contain('3.5.2') }
+  its(:stdout) { should_not contain('2.7.12') }
+  its(:stdout) { should contain('3.5.2') }
 end
 
 describe command(command_base % 'python --version') do
-  its(:stdout) { should contain('2.7.12') }
-  its(:stdout) { should_not contain('3.5.2') }
+  its(:stdout) { should_not contain('2.7.12') }
+  its(:stdout) { should contain('3.5.2') }
 end
 
 # Check whether variables of 'FGtatsuro.anyenv' affects the behavior of this role properly.
