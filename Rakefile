@@ -8,11 +8,8 @@ namespace :spec do
   hosts = [
     {
       :name     =>  'localhost',
-      :backend  =>  'exec'
-    },
-    {
-      :name     =>  'container',
-      :backend  =>  'docker' 
+      :backend  =>  'exec',
+      :anyenv_home  => '/Users/travis'
     }
   ]
   if ENV['SPEC_TARGET'] then
@@ -28,6 +25,8 @@ namespace :spec do
     RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
       ENV['TARGET_HOST'] = host[:name]
       ENV['SPEC_TARGET_BACKEND'] = host[:backend]
+      ENV['ANYENV_OWNER'] = host[:anyenv_owner]
+      ENV['ANYENV_HOME'] = host[:anyenv_home]
       t.pattern = "spec/pyenv_spec.rb"
     end
   end

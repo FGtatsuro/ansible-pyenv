@@ -1,2 +1,25 @@
 ---
 # tasks file for pyenv(On OSX)
+- block:
+  - name: Check whether pyenv is installed
+    shell: "{{ pyenv_login_shell }} -lc 'pyenv versions'"
+    register: result_pyenv_versions
+    ignore_errors: yes
+    changed_when: no
+  - name: Install pyenv
+    shell: "{{ pyenv_login_shell }} -lc 'anyenv install pyenv'"
+    when: "result_pyenv_versions.rc != 0"
+  - name: Install python
+    shell: "{{ pyenv_login_shell }} -lc 'pyenv install {{ item }}'"
+    when: "pyenv_python_versions is defined and item not in result_pyenv_versions.stdout"
+    with_items: "{{ pyenv_python_versions }}"
+  - name: Check default version
+    shell: "{{ pyenv_login_shell }} -lc 'pyenv global'"
+    register: result_pyenv_global
+    changed_when: no
+    when: "pyenv_global_version is defined"
+  - name: Set default version
+    shell: "{{ pyenv_login_shell }} -lc 'pyenv global {{ pyenv_global_version }}'"
+    when: "pyenv_global_version is defined and pyenv_global_version not in result_pyenv_global.stdout"
+  become: yes
+  become_user: "{{ anyenv_owner }}"

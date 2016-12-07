@@ -53,6 +53,12 @@ Local requirements are as follows.
 - Ansible (>= 2.0.0)
 - Docker (>= 1.10.1)
 
+Notes
+-----
+
+- `anyenv_profile` variable of `FGtatsuro.anyenv` must exist on path `pyenv_login_shell` can load automatically. For example, the combination of `pyenv_login_shell=/bin/bash` and `anyenv_profile=.bash_profile` will be good.
+- Tasks of this role are executed by `anyenv_owner`(variable of `FGtatsuro.anyenv`).
+
 License
 -------
 

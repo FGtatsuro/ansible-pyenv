@@ -14,13 +14,14 @@ matrix:
       install:
         - sudo pip install -U setuptools
         - sudo pip install ansible
-        - ansible-galaxy install FGtatsuro.python-requirements
+        - ansible-galaxy install -r role_requirements.yml
         # Workaround for OSX of TravisCI.
         # Ref. https://github.com/travis-ci/travis-ci/issues/5554
         - rvm use ruby-2.2.1
         - bundle install
       env:
         - TARGET=localhost
+        - EXTRA_VARS="anyenv_home='/Users/travis' anyenv_owner='travis' anyenv_group='staff' anyenv_profile='.bash_profile'"
         # Workaround for OSX.
         - PYTHONPATH="/Library/Python/2.7/site-packages:$PYTHONPATH"
     - os: linux
@@ -65,7 +66,7 @@ sudo: required
 install:
   - pip install ansible
   # Resolve dependencies(When target role isn't installed via Ansible Galaxy, auto resolution of dependencies doesn't occur.)
-  - ansible-galaxy install FGtatsuro.python-requirements
+  - ansible-galaxy install -r role_requirements.yml
   - bundle install
 
 script:
