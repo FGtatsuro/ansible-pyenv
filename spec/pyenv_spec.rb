@@ -1,7 +1,7 @@
 require "spec_helper_#{ENV['SPEC_TARGET_BACKEND']}"
 
 if ENV['TARGET_HOST'].include?('container') then
-  command_base = "su -s /bin/bash -c '%s' - #{ENV['ANYENV_OWNER']}"
+  command_base = "su -l -s /bin/bash -c '%s' #{ENV['ANYENV_OWNER']}"
 else
   command_base = "/bin/bash -lc '%s'"
 end
