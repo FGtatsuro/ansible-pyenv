@@ -1,6 +1,14 @@
 ---
 # tasks file for pyenv(On Debian family)
 - block:
+  - name: Install requirements to build python
+    apt: name={{ item }} update_cache=yes cache_valid_time=3600 install_recommends=no
+    with_items:
+      - zlib1g-dev
+      - libssl-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - libbz2-dev
   - name: Check whether pyenv is installed
     # Alt.
     # shell: "su -s {{ pyenv_login_shell }} -c 'source {{ anyenv_home }}/{{ anyenv_profile }} && pyenv versions' - {{ anyenv_owner }}"
