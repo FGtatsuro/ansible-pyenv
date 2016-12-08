@@ -57,6 +57,7 @@ Notes
 
 - `anyenv_profile` variable of `FGtatsuro.anyenv` must exist on path `pyenv_login_shell` can load automatically. For example, the combination of `pyenv_login_shell=/bin/bash` and `anyenv_profile=.bash_profile` will be good.
 - Tasks of this role are executed by `anyenv_owner`(variable of `FGtatsuro.anyenv`).
+- If pyenv is already installed in different place from `anyenv_home`(variable of `FGtatsuro.anyenv`), this role mayn't work as you expect.
 
 License
 -------
