@@ -1,17 +1,28 @@
 require "spec_helper_#{ENV['SPEC_TARGET_BACKEND']}"
 
-describe package('python-dev'), :if => ['debian', 'alpine'].include?(os[:family]) do
-  it { should be_installed }
+if ENV['TARGET_HOST'].include?('container') then
+  command_base = "su -l -s /bin/bash -c '%s' #{ENV['ANYENV_OWNER']}"
+else
+  command_base = "/bin/bash -lc '%s'"
 end
 
-describe package('build-essential'), :if => os[:family] == 'debian' do
-  it { should be_installed }
+
+describe command(command_base % 'pyenv versions') do
+  its(:stdout) { should contain('2.7.12') }
+  its(:stdout) { should contain('3.5.2') }
 end
 
-describe package('build-base'), :if => os[:family] == 'alpine' do
-  it { should be_installed }
+describe command(command_base % 'pyenv global') do
+  its(:stdout) { should_not contain('2.7.12') }
+  its(:stdout) { should contain('3.5.2') }
 end
 
-describe command('which python') do
-  its(:exit_status) { should eq 0 }
+describe command(command_base % 'python --version') do
+  its(:stdout) { should_not contain('2.7.12') }
+  its(:stdout) { should contain('3.5.2') }
+end
+
+# Check whether variables of 'FGtatsuro.anyenv' affects the behavior of this role properly.
+describe file("#{ENV['ANYENV_HOME']}/.anyenv/envs/pyenv/bin/pyenv") do
+  it { should exist }
 end

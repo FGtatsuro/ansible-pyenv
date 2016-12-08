@@ -11,7 +11,6 @@ Requirements
 The dependencies on other softwares/libraries for this role.
 
 - Debian
-- Alpine Linux
 - OSX
   - Homebrew (>= 0.9.5)
 
@@ -20,12 +19,19 @@ Role Variables
 
 The variables we can use in this role.
 
+|name|description|default|
+|---|---|---|
+|pyenv_python_versions|Installed python versions with pyenv.|It isn't defined in default. No python is installed.|
+|pyenv_global_version|This version is used as global in target host.|It isn't defined in default. Default version isn't set.|
+|pyenv_login_shell|Login shell used when this role installs pyenv and python.|/bin/bash|
+
 Role Dependencies
 -----------------
 
 The dependencies on other roles for this role.
 
 - FGtatsuro.python-requirements
+- FGtatsuro.anyenv
 
 Example Playbook
 ----------------
@@ -45,6 +51,13 @@ Local requirements are as follows.
 
 - Ansible (>= 2.0.0)
 - Docker (>= 1.10.1)
+
+Notes
+-----
+
+- `anyenv_profile` variable of `FGtatsuro.anyenv` must exist on path `pyenv_login_shell` can load automatically. For example, the combination of `pyenv_login_shell=/bin/bash` and `anyenv_profile=.bash_profile` will be good.
+- Tasks of this role are executed by `anyenv_owner`(variable of `FGtatsuro.anyenv`).
+- If pyenv is already installed in different place from `anyenv_home`(variable of `FGtatsuro.anyenv`), this role mayn't work as you expect.
 
 License
 -------
